@@ -31,13 +31,17 @@ CHIP CPU {
         addressM[15],    // Address in data memory (of M)
         pc[15];          // address of next instruction
 
-    PARTS: //A instruction: 0 XX 
-    DMux(in=inM[0], sel=inM[0], a=, b=loadAregister);
+    PARTS: 
+    
 
-    ARegister(in=inM[1..15], load=loadAregister, out=aRegout);
+    //Mux vor dem A register
+    Not(in=instruction[0], out=notFirstInstructionBit)
+    Mux(a=, b=ALUout, sel=notFirstInstructionBit, out=loadA)
+    ARegister(in=platzhalter, load=notFirstInstructionBit, out=aRegOut);
 
     //ALU
-    Mux(a=A, b=M, sel=instruction[3], out=AorM)
+    Mux(a=aRegOut, b=M, sel=instruction[3], out=AorM)
     ALU(x=D, y=AorM, zx=instruction[4], nx=instruction[5], zy=instruction[6], ny=instruction[7], f=instruction[8], no=instruction[9], out=ALUout, zr=ALUzr, ng=ALUng);
 	
+
 }
