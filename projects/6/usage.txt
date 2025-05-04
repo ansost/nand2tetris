@@ -1,0 +1,12 @@
+Python version: Python 3.13.2
+
+Es müssen keine libraries installiert werden.
+
+Usage: 
+> python assembler.py -in <filepath> 
+ODER 
+> python assembler.py --input_file <filepath>
+
+Beispiele: 
+> python assembler.py -in rect/Rect.asm
+> python assembler.py -in Add.asm
