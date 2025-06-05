@@ -1,0 +1,11 @@
+ class Main {
+    /** Initializes a Dr. Mastracchio game and starts running it. */
+    function void main() {
+        var MathGame game;
+        do MathGame.newInstance();
+        let game = MathGame.getInstance();
+        do game.run();
+        //do game.dispose();
+        return;
+    }
+}

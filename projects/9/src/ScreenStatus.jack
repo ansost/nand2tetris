@@ -1,0 +1,25 @@
+class ScreenStatus{
+    field Smiley smiley;
+
+    method void showExplanation(){
+
+    }
+
+    method void turnAngry(){
+
+    }
+
+    method void goodBoy(){
+
+    }
+
+    method void badBoy(){
+
+    }
+
+    method void showEndScreen(){
+        
+    }
+
+
+}

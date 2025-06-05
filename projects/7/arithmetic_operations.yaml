@@ -1,0 +1,95 @@
+add: |-
+  @SP
+  AM=M-1
+  D=M
+  A=A-1
+  M=M+D
+sub: |-
+  @SP
+  AM=M-1
+  D=M
+  A=A-1
+  M=M-D
+neg: |-
+  @SP
+  AM=M-1
+  D=M
+  D=M+D
+  M=M-D
+eq: |-
+  @SP
+  AM=M-1
+  D=M
+  A=A-1
+  D=D-M
+  @ISFALSE
+  D;JNE
+  M=-1
+  @CONT
+  0;JMP
+  (ISFALSE)
+  M=0
+  (CONT)
+gt: |-
+  @SP
+  AM=M-1
+  D=M
+  A=A-1
+  D=D-M
+  @ISLESSER
+  D;JLT
+  M=0
+  @CONT
+  0;JMP
+  (ISLESSER)
+  M=-1
+  (CONT)
+lt: |-
+  @SP
+  AM=M-1
+  D=M Y ist in D
+  A=A-1
+  D=D-M
+  @ISGREATER
+  D;JGT
+  M=0
+  @CONT
+  0;JMP
+  (ISGREATER)
+  M=-1
+  (CONT)
+and: |-
+  @SP
+  AM=M-1
+  D=M
+  A=A-1
+  D=D-M
+  @ISFALSE
+  D;JNE
+  D=-1
+  @LESSTHANCHECK
+  0;JMP
+  (ISFALSE)
+  D=0
+  @END
+  0;JMP
+  (LESSTHANCHECK)
+  @ANDISTRUE
+  @SP
+  AM=M-1
+  D=M
+  D;JNE
+  M=0
+  (ANDISTRUE)
+  M=-1
+  (END)
+
+
+
+
+  
+
+
+
+
+

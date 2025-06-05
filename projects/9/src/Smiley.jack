@@ -1,0 +1,93 @@
+class Smiley {
+    
+    method void happy(boolean crown){
+        var boolean crown;
+        ////Draw smiley.
+        do Screen.drawCircle(400,165,56); //col, row, radius
+
+        //Draw mouth.
+        do Screen.setColor(false); //White mouth part.
+        do Screen.drawCircle(400,170,35); 
+        do Screen.setColor(true); //Black mouth part.
+        do Screen.drawCircle(400,150,40); 
+
+        //Draw eyes.
+        do Screen.setColor(false);
+        do Screen.drawCircle(377,145,7); //Left eye.
+        do Screen.drawCircle(423,145,7); //Right eye.
+
+        if (crown){
+            //Outer rect. border.
+            do Screen.setColor(true);
+            do Screen.drawRectangle(355,100,445,120);
+            //Inner rect. border.
+            do Screen.setColor(false);
+            do Screen.drawRectangle(357, 100, 443, 118); 
+            //Spikes left to right.
+            do Screen.setColor(true);
+            do Screen.drawLine(370,90,355,100);
+            do Screen.drawLine(370,90,385,100);
+            do Screen.drawLine(400,90,385,100);
+            do Screen.drawLine(400,90,415,100);
+            do Screen.drawLine(430,90,415,100);
+            do Screen.drawLine(430,90,445,100);
+
+            do Screen.drawLine(370,89,355,99);
+            do Screen.drawLine(370,89,385,99);
+            do Screen.drawLine(400,89,385,99);
+            do Screen.drawLine(400,89,415,99);
+            do Screen.drawLine(430,89,415,99);
+            do Screen.drawLine(430,89,445,99);
+        }
+        return;
+    }
+
+    method void sad(){
+        ////Draw smiley.
+        do Screen.setColor(true); //White mouth part.
+        do Screen.drawCircle(400,165,56);
+
+        //Draw mouth.
+        do Screen.setColor(false); //White mouth part.
+        do Screen.drawCircle(400,185,25); 
+        do Screen.setColor(true); //Black mouth part.
+        do Screen.drawCircle(400,190,25); 
+
+        //Draw eyes.
+        do Screen.setColor(false);
+        do Screen.drawCircle(377,145,7); //Left eye.
+        do Screen.drawCircle(423,145,7); //Right eye.
+        return;
+    }
+
+    method void angry(){
+        ////Draw smiley.
+        do Screen.setColor(true); 
+        do Screen.drawCircle(400,165,56); 
+
+        //Draw mouth.
+        do Screen.setColor(false); //White mouth part.
+        do Screen.drawCircle(400,185,25); 
+        do Screen.setColor(true); //Black mouth part.
+        do Screen.drawCircle(400,190,25); 
+
+        //Draw eyebrows.
+        //Left eyebrow.
+        do Screen.setColor(false); 
+        do Screen.drawLine(375,120,390,130); //col start, row start, col end, row end
+        do Screen.drawLine(375,121,390,131);
+        do Screen.drawLine(375,122,390,132);
+
+        //Right eyebrow.
+        do Screen.drawLine(425,120,410,130); //col start, row start, col end, row end
+        do Screen.drawLine(425,121,410,131);
+        do Screen.drawLine(425,122,410,132);
+
+        //Draw eyes.
+        //Left eye.
+        do Screen.drawCircle(377,145,7); 
+        //Right eye.
+        do Screen.drawCircle(423,145,7);
+        return;
+    }
+}
