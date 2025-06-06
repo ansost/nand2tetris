@@ -46,7 +46,7 @@ class MathGame {
         }
         do Screen.clearScreen();
 
-        do smiley.angry();
+        do screenStatus.showExplanation();
         
         //Show explanation screen.
         // do screenStatus.explanation();
