@@ -1,7 +1,9 @@
 class ScreenStatus{
     field Smiley smiley;
+    field String playerName;
 
     method void showExplanation(){
+        var String playerName;
         // Print the explanations
         do Output.moveCursor(3, 20); //row, column
         //Headline
@@ -25,13 +27,26 @@ class ScreenStatus{
         do Output.moveCursor(22,30);
         do Output.printString("the smileys");
         // Continue instruction
-        do Output.moveCursor(17,16);
-        do Output.printString("Press [SPACE] to continue");
-
-        // Continue to the first equation
-        
+        do Output.moveCursor(13,8);
+        let playerName = Keyboard.readLine("Enter Name and press [Enter] to continue:   ");
+        do Output.moveCursor(14,8);
+        do Output.printString("Hello");
+        do Output.moveCursor(14,15);
+        do Output.printString(playerName);
+        do Output.moveCursor(16,8);
+        do Output.printString("Press [Space] to continue");
         return;
         
+    }
+
+    method void equation(){
+        do Output.moveCursor(3, 20); //row, column
+        //Headline
+        do Output.printString("Solve this equation");
+        // underline Instructions
+        do Screen.setColor(true);
+        do Screen.drawLine(160, 50, 270, 50);
+        return;
     }
 
     // method void turnAngry(){

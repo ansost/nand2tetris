@@ -47,17 +47,18 @@ class MathGame {
         do Screen.clearScreen();
 
         do screenStatus.showExplanation();
+        let key = 0; // set key back to zero
         
-        //Show explanation screen.
-        // do screenStatus.explanation();
-        // while (~(key = 32)) {
-        //     let key = Keyboard.keyPressed();
-        //     do Sys.wait(50);
-        // }
-        // do Screen.clearScreen();
+        // Show equation screen.
+
+        while (~(key = 32)) {
+            let key = Keyboard.keyPressed();
+            do Sys.wait(50);
+        }
+        do Screen.clearScreen();
         
-        //Show equation.
-        //do screenStatus.equation();
+        //Show equation
+        do screenStatus.equation();
         return;
 
     }
