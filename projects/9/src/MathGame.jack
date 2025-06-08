@@ -1,11 +1,12 @@
 class MathGame {
     //type Class name;
     static ScreenStatus screenStatus;
-    //field Equation equation;
     static MathGame instance;
-    field int score;
+    field int positiveScore;
+    field int snegativeScore;
     field boolean exit;
-    field Smiley smiley;
+    static Smiley smiley;
+    static int score;
 
     /** Constructs a new Dr. Mastracchio game. */
     constructor MathGame new() {
@@ -26,12 +27,12 @@ class MathGame {
         return this;
     }
 
-    /** Returns this Pong game. */
+    /** Returns the Dr. Mastracchio game. */
     function MathGame getInstance() {
         return instance;
     }
 
-    /** Creates an instance of a Pong game. */
+    /** Creates an instance of the game. */
     function void newInstance() {
         let instance = MathGame.new();
         return;
@@ -39,6 +40,7 @@ class MathGame {
 
     method void run() {
         var char key;
+
         //Check if game has been started (space has been pressed).
         while (~(key = 32)) {
             let key = Keyboard.keyPressed();
@@ -49,16 +51,102 @@ class MathGame {
         do screenStatus.showExplanation();
         let key = 0; // set key back to zero
         
-        // Show equation screen.
+        // Show calculation screen.
 
         while (~(key = 32)) {
             let key = Keyboard.keyPressed();
             do Sys.wait(50);
         }
+        do Screen.clearScreen(
+        );
+
+        do screenStatus.showCalculation();
+
+        //Test goodBoy screen
+        while (~(key = 32)) {
+            let key = Keyboard.keyPressed();
+            do Sys.wait(50);
+        }
         do Screen.clearScreen();
+
+        do screenStatus.goodBoy();
+
+        //Test badBoy screen
+        while (~(key = 32)) {
+            let key = Keyboard.keyPressed();
+            do Sys.wait(50);
+        }
+        do Screen.clearScreen();
+
+        do screenStatus.badBoy();
+
+        //Test Win screen
+        while (~(key = 32)) {
+            let key = Keyboard.keyPressed();
+            do Sys.wait(50);
+        }
+        do Screen.clearScreen();
+
+        do screenStatus.showEndScreen();
         
-        //Show equation
-        do screenStatus.equation();
+        // Array of calculations = [x,]
+
+        // Trues = 0
+        // Falses= 0
+        // Counter= 0 # oder wherever array indexing startet 
+
+        // While trues & falses ~=5:
+        // Current calculation = array[counter]
+        // Calculation_text = calculation.get_text
+        // Screen_status.show_equation(calculation_text)
+        // Correct label = calculation.get_solution
+        // Listen to keyboard input
+        // If input==correct label 
+        // Screen_status.show_happy
+        // Score = score + …
+        // Trues = true +1
+        // If input == not number:
+        // Screen_status.show_angry
+        // Else: / if input ~= correct label 
+        // Screen_status.show_sad
+        // Score = score - …
+        // Falses = false + 1
+        // Counter = Counter + 1
+
+        // Screen status.show_endscreen 
+        // Print score 
+
+        // #——calculation class
+        // Class calculation
+
+        // Attr: self.solution 
+        // Attr: self.text
+
+        // Method: get_solution
+        // Return self.solution
+
+        // Method: get_text
+        // Return self.text
+
+        // #—-screen class
+        // Class screen_status(calculation)
+
+        // Method: show happy
+        // Smiley.happy 
+        // Print(wrong!)
+
+        // Method: show angry
+        // Smiley.angry
+        // Print(put in a number!)
+
+        // Method: show sad
+        // Smiley.sad
+        // Print(not correct!)
+
+        // Method: show calculation
+        // Print(calculation_text)
+        // Print(enter a number)
+        
         return;
 
     }

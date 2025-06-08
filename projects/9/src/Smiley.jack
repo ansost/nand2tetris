@@ -3,6 +3,7 @@ class Smiley {
     method void happy(boolean crown){
         var boolean crown;
         ////Draw smiley.
+        do Screen.setColor(true);
         do Screen.drawCircle(400,165,56); //col, row, radius
 
         //Draw mouth.
@@ -39,6 +40,7 @@ class Smiley {
             do Screen.drawLine(430,89,415,99);
             do Screen.drawLine(430,89,445,99);
         }
+
         return;
     }
 
