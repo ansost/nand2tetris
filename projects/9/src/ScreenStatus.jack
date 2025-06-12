@@ -1,24 +1,98 @@
 class ScreenStatus{
     field Smiley smiley;
+    field String playerName;
+    field String text;
+    field String answer;
 
     method void showExplanation(){
-
+        var String playerName;
+        // Print the explanations
+        do Output.moveCursor(3, 20); //row, column
+        //Headline
+        do Output.printString("Instructions");
+        // underline Instructions
+        do Screen.setColor(true);
+        do Screen.drawLine(160, 50, 255, 50);
+        do Output.println();
+        do Output.println();
+        do Output.println();
+        // Write instructions
+        do Output.printString("You will get a few math problems to solve");
+        do Output.println();
+        do Output.printString("If you get 5 right, you win :)");
+        do Output.println();
+        do Output.printString("If you get 5 wrong, you lose :(");
+        do Output.moveCursor(20,30);
+        do Output.printString("Fun fact: these were all calcula-");
+        do Output.moveCursor(21,30);
+        do Output.printString("tions we had to do for programming");
+        do Output.moveCursor(22,30);
+        do Output.printString("the smileys");
+        // Continue instruction
+        do Output.moveCursor(13,8);
+        let playerName = Keyboard.readLine("Enter Name and press [Enter] to continue:   ");
+        do Output.moveCursor(14,8);
+        do Output.printString("Hello");
+        do Output.moveCursor(14,15);
+        do Output.printString(playerName);
+        do Output.moveCursor(16,8);
+        do Output.printString("Press [Space] to continue");
+        return;
+        
     }
 
-    method void turnAngry(){
-
+    method void showCalculation(){
+        var String answer;
+        do Output.moveCursor(3, 20); //row, column
+        //Headline
+        let answer = Keyboard.readLine("Solve this calculation:");
+        // underline Instructions
+        do Screen.setColor(true);
+        do Screen.drawLine(160, 50, 360, 50);
+        do Output.moveCursor(6, 20);
+        do Output.moveCursor(13,8);
+        // do Output.printString(calculation_text);
+        return;
     }
 
     method void goodBoy(){
-
+        var boolean crown;
+        var Smiley smiley;
+        do Output.moveCursor(3, 20); //row, column
+        //Headline
+        do Output.printString("Richtig! Weiter so!");
+        do smiley.happy(crown);
+        do Output.moveCursor(13,8);
+        do Keyboard.readLine("Press [Enter] to continue");
+        do Output.moveCursor(16,8);
+        do Output.printString("Press [Space] to continue");
+        return;
     }
 
     method void badBoy(){
+        var Smiley smiley;
+        do Output.moveCursor(3, 20); //row, column
+        //Headline
+        do Output.printString("Leider falsch! Ein weiterer Versuch wartet!");
+        do smiley.sad();
+        do Output.moveCursor(13,8);
+        do Keyboard.readLine("Press [Enter] to continue");
+        do Output.moveCursor(16,8);
+        do Output.printString("Press [Space] to continue");
+        return;
 
     }
 
     method void showEndScreen(){
-        
+        var Smiley smiley;
+        var boolean crown;
+        let crown = true;
+        do Output.moveCursor(3, 20); //row, column
+        //Headline
+        do Output.printString("Gewonnen! Super!");
+        do smiley.happy(crown);
+        return;
+
     }
 
 
