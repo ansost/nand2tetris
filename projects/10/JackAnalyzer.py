@@ -1,15 +1,17 @@
 """Parser for the Hack language."""
+import re
 import os 
 import argparse
 
 import JackTokenizer
-from JackTokenizer import detailed_tokenize
+from JackTokenizer import detailed_tokenize, return_token_type
 
 def remove_comments(lines):
     """Removes comments with thy syntax: /** */ or // ."""
     cleaned = []
     for line in lines:
         line = re.sub(r"(//.*?\n)|(/\*\*.*\n)", "", line)
+        line = re.sub(r"\t", "", line)
         if line:
             cleaned.append(line)
     return cleaned
@@ -46,12 +48,13 @@ if __name__ == "__main__":
         print(f"No files found in {path}!")
         exit()
 
+    xml_lines = []
+
     for file in files: 
         with open(os.path.join(path,file), "r") as f:
             raw_lines = f.readlines()
         lines = remove_comments(raw_lines)
         tokens = detailed_tokenize(lines, symbols)
-        breakpoint()
 
         new_filename = file.split(".")[0]+"T.xml"
         with open(os.path.join(path, new_filename), "w") as f:
