@@ -6,6 +6,9 @@ import argparse
 import JackTokenizer
 from JackTokenizer import detailed_tokenize, return_token_type
 
+import JackCompiler
+from JackCompiler import *
+
 def remove_comments(lines):
     """Removes comments with thy syntax: /** */ or // ."""
     cleaned = []
@@ -55,7 +58,13 @@ if __name__ == "__main__":
             raw_lines = f.readlines()
         lines = remove_comments(raw_lines)
         tokens = detailed_tokenize(lines, symbols)
-        breakpoint()
+        
+        for idx, token in enumerate(tokens):
+            if idx == 0 and token != "class":
+                raise Exception("Syntax Error! First token is not 'Class'.")
+            else:
+                compile_class(token, tokens, idx)
+
         new_filename = file.split(".")[0]+"T.xml"
         with open(os.path.join(path, new_filename), "w") as f:
             f.writelines([line for line in xml_lines])
