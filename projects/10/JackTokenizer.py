@@ -19,12 +19,14 @@ def return_token_type(token):
 
 def basic_tokenize(lines):
     """Split tokens by whitespace and remove any superfluous whitespace."""
-    long_string = " ".join(lines)
-    long_string = re.sub(r" {2,}|\n", "", long_string)
-    tokens = long_string.split(" ")
+    long_string = " ".join(lines).replace("\n", "")
+    long_string = re.sub(r" {2,}|\t", "", long_string)
+    string_parts = long_string.split('"')
+    for index, item in enumerate(string_parts):
+        if index % 2 == 1:
+            string_parts[index] = item.replace(" ", "\u0394")
+    tokens = " ".join(string_parts).split(" ")
     tokens = [token for token in tokens if token]
-    # print(tokens)
-    breakpoint()
     return tokens
 
 def detailed_tokenize(lines, symbols):
@@ -43,7 +45,6 @@ def detailed_tokenize(lines, symbols):
             else:
                 subword.append(char)
         if subword:
-            final_destination.append("".join(subword))
-    breakpoint()
-    
+            final_destination.append("".join(subword))   
+    final_destination = [item.replace("\u0394", " ") for item in final_destination] 
     return final_destination
