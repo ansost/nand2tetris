@@ -51,9 +51,9 @@ if __name__ == "__main__":
         print(f"No files found in {path}!")
         exit()
 
-    xml_lines = []
 
     for file in files: 
+        xml_lines = []
         with open(os.path.join(path,file), "r") as f:
             raw_lines = f.readlines()
         lines = remove_comments(raw_lines)
@@ -62,8 +62,9 @@ if __name__ == "__main__":
         with open(file +".tokens", "w") as f:
             f.writelines([str(line)+"\n" for line in tokens])
         
-        compile_class(tokens, current_idx=0)
+        xml_lines = compile_class(xml_lines, tokens, current_idx=0)
 
         new_filename = file.split(".")[0]+"T.xml"
         with open(os.path.join(path, new_filename), "w") as f:
             f.writelines([line for line in xml_lines])
+        print(f"File {file} done!")

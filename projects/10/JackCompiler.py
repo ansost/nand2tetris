@@ -45,7 +45,7 @@ def compile_varName(token_list, current_idx, xml_lines, use_compile_type = None)
         return compile_varName(token_list, current_idx, xml_lines, use_compile_type = use_compile_type) #TODO
 
 def compile_classVarDec(token_list, current_idx, xml_lines):
-    if token_list[current_idx+1] in ["constructor", "function", "method"]:
+    if token_list[current_idx] in ["constructor", "function", "method"]:
         return token_list, current_idx, xml_lines
     else:
         xml_lines = write_partial_token(xml_lines, name = "classVarDec", position="beginning")
@@ -195,7 +195,7 @@ def compile_subroutineBody(token_list, current_idx, xml_lines):
     token_list, current_idx, xml_lines = compile_Statements(token_list, current_idx, xml_lines)
     return token_list, current_idx, xml_lines
 
-def compile_subroutineDec(token_list, current_idx):
+def compile_subroutineDec(token_list, current_idx, xml_lines):
     xml_lines = write_partial_token(xml_lines, name = "subroutineDec", position="beginning")
     xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write constructor, function, method
     
@@ -222,12 +222,15 @@ def compile_subroutineDec(token_list, current_idx):
     xml_lines = write_partial_token(xml_lines, name = "subroutineDec", position="end")
     return token_list, current_idx, xml_lines
 
-def compile_class(token_list, current_idx):
-    xml_lines = ["<tokens>"]
+def compile_class(xml_lines, token_list, current_idx):
+    #xml_lines = ["<tokens>\n"]
+    xml_lines = write_partial_token(xml_lines, name = "class", position="beginning")
     xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write class
     xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write className
     xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write {
     token_list, current_idx, xml_lines = compile_classVarDec(token_list, current_idx, xml_lines)
     token_list, current_idx, xml_lines = compile_subroutineDec(token_list, current_idx, xml_lines)
     xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write }
-    return xml_lines.append("</tokens>")
+    xml_lines = write_partial_token(xml_lines, name = "class", position="end")
+    #xml_lines.append("</tokens>")
+    return xml_lines
