@@ -4,7 +4,7 @@ import os
 import argparse
 
 import JackTokenizer
-from JackTokenizer import detailed_tokenize, return_token_type
+from JackTokenizer import *
 
 import JackCompiler
 from JackCompiler import *
@@ -58,12 +58,11 @@ if __name__ == "__main__":
             raw_lines = f.readlines()
         lines = remove_comments(raw_lines)
         tokens = detailed_tokenize(lines, symbols)
+        # Debugging:
+        with open(file +".tokens", "w") as f:
+            f.writelines([str(line)+"\n" for line in tokens])
         
-        for idx, token in enumerate(tokens):
-            if idx == 0 and token != "class":
-                raise Exception("Syntax Error! First token is not 'Class'.")
-            else:
-                compile_class(token, tokens, idx)
+        compile_class(tokens, current_idx=0)
 
         new_filename = file.split(".")[0]+"T.xml"
         with open(os.path.join(path, new_filename), "w") as f:
