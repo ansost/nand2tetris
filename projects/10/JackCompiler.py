@@ -84,7 +84,9 @@ def compile_term(token_list, current_idx, xml_lines):
         xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write )
     elif token_list[current_idx] in ["~", "-"]:
         xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write op
+        xml_lines = write_partial_token(xml_lines, name = "term", position="beginning")
         token_list, current_idx, xml_lines = compile_term(token_list, current_idx, xml_lines)
+        xml_lines = write_partial_token(xml_lines, name = "term", position="end")
     elif token_list[current_idx +1] == "[":
         xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write subroutine- or varname     
         xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write  (/]     
@@ -96,8 +98,6 @@ def compile_term(token_list, current_idx, xml_lines):
         token_list, current_idx, xml_lines = compile_subroutineCall(token_list, current_idx, xml_lines)
     else:
         xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write varname/integerconstant/stringconstant/keyboardconstant
-    # except:
-    #     breakpoint()
     return token_list, current_idx, xml_lines
 
 def compile_expressionList(token_list, current_idx, xml_lines):
@@ -110,8 +110,11 @@ def compile_expressionList(token_list, current_idx, xml_lines):
         return compile_expressionList(token_list, current_idx, xml_lines)
 
 def compile_expression(token_list, current_idx, xml_lines):
-    if token_list[current_idx-1] not in ["+", "-", "<", "&", ">"]:
+    if token_list[current_idx-3] in ["let", "1"]:
         xml_lines = write_partial_token(xml_lines, name = "expression", position="beginning")
+    elif token_list[current_idx-1] not in ["+", "-", "<", "&", ">", "*", "/", "|", "="]:
+        xml_lines = write_partial_token(xml_lines, name = "expression", position="beginning")
+    #elif token_list[current_idx-1] 
     xml_lines = write_partial_token(xml_lines, name = "term", position="beginning")
     token_list, current_idx, xml_lines = compile_term(token_list, current_idx, xml_lines)
     xml_lines = write_partial_token(xml_lines, name = "term", position="end")
