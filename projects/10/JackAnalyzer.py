@@ -13,7 +13,7 @@ def remove_comments(lines):
     """Removes comments with thy syntax: /** */ or // ."""
     cleaned = []
     for line in lines:
-        line = re.sub(r"(//.*?$)|(/\*\*.*$)|((\s)?\*.*$)", "", line)
+        line = re.sub(r"(//.*?$)|^ \*.*$|/\*\*.*$", "", line)
         line = re.sub(r"\t", "", line)
         if line:
             cleaned.append(line)
@@ -59,13 +59,20 @@ if __name__ == "__main__":
             raw_lines = f.readlines()
         lines = remove_comments(raw_lines)
         tokens = detailed_tokenize(lines, symbols)
+
         # Debugging:
         with open(file +".tokens", "w") as f:
             f.writelines([str(line)+"\n" for line in tokens])
         
         xml_lines = compile_class(tokens, xml_lines, current_idx=0)
+        finished_xml_lines = []
+        for line in xml_lines:
+            line = re.sub(r"> < <","> &lt; <", line)
+            line = re.sub(r"> > <","> &gt; <", line)
+            line = re.sub(r"> & <","> &amp; <", line)
+            finished_xml_lines.append(line)
 
         new_filename = file.split(".")[0]+"T.xml"
         with open(os.path.join(path, new_filename), "w") as f:
-            f.writelines([line for line in xml_lines])
+            f.writelines([line for line in finished_xml_lines])
         print(f"File {file} done!")
