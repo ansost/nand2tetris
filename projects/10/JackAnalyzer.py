@@ -39,14 +39,15 @@ if __name__ == "__main__":
     if args.source:
         if ".jack" in args.source:
             path = os.path.dirname(args.source)
-            files = os.path.basename(args.source)
+            files = [os.path.basename(args.source)]
         else:
             path = os.path.realpath(args.source)
+            files = [file for file in os.listdir(path) if os.path.realpath(file).endswith(".jack")]
     else:
         path = os.getcwd()
+        files = [file for file in os.listdir(path) if os.path.realpath(file).endswith(".jack")]
 
-    files = [file for file in os.listdir(path) if os.path.realpath(file).endswith(".jack")]
-
+    
     if not files:
         print(f"No files found in {path}!")
         exit()
@@ -62,7 +63,7 @@ if __name__ == "__main__":
         with open(file +".tokens", "w") as f:
             f.writelines([str(line)+"\n" for line in tokens])
         
-        xml_lines = compile_class(xml_lines, tokens, current_idx=0)
+        xml_lines = compile_class(tokens, xml_lines, current_idx=0, )
 
         new_filename = file.split(".")[0]+"T.xml"
         with open(os.path.join(path, new_filename), "w") as f:
