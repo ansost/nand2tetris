@@ -63,7 +63,7 @@ if __name__ == "__main__":
         with open(file +".tokens", "w") as f:
             f.writelines([str(line)+"\n" for line in tokens])
         
-        xml_lines = compile_class(tokens, xml_lines, current_idx=0, )
+        xml_lines = compile_class(tokens, xml_lines, current_idx=0)
 
         new_filename = file.split(".")[0]+"T.xml"
         with open(os.path.join(path, new_filename), "w") as f:
