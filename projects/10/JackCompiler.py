@@ -45,7 +45,7 @@ def compile_varName(token_list, current_idx, xml_lines, use_compile_type = None)
         return token_list, current_idx, xml_lines
     elif token_list[current_idx] == ",":
         xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write comma
-        return compile_varName(token_list, current_idx, xml_lines, use_compile_type = use_compile_type) #TODO
+        return compile_varName(token_list, current_idx, xml_lines, use_compile_type = use_compile_type)
 
 def compile_classVarDec(token_list, current_idx, xml_lines):
     if token_list[current_idx] in ["constructor", "function", "method"]:
@@ -90,41 +90,37 @@ def compile_term(token_list, current_idx, xml_lines):
         token_list, current_idx, xml_lines = compile_expression(token_list, current_idx, xml_lines)
         xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write  )/]
     elif token_list[current_idx +1] == "(":
-        xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write subroutine- or varname     
-        xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write  (/[]     
-        token_list, current_idx, xml_lines = compile_expressionList(token_list, current_idx, xml_lines)
-        xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write  )/]
+        token_list, current_idx, xml_lines = compile_subroutineCall(token_list, current_idx, xml_lines)
     elif token_list[current_idx +1] == ".":
-        xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write classname/varname     
-        xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write .  
-        xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write subroutine name    
-        xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write (  
-        token_list, current_idx, xml_lines = compile_expressionList(token_list, current_idx, xml_lines)
-        xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write )
+        token_list, current_idx, xml_lines = compile_subroutineCall(token_list, current_idx, xml_lines)
     else:
         xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write varname/integerconstant/stringconstant/keyboardconstant
     return token_list, current_idx, xml_lines
 
 def compile_expressionList(token_list, current_idx, xml_lines):
-    xml_lines = write_partial_token(xml_lines, name = "expressionList", position="beginning")
-    if token_list[current_idx] != ")":
+    if token_list[current_idx] == ")":
+        return token_list, current_idx, xml_lines
+    else:
+        if token_list[current_idx] == ",":
+            xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write comma
         token_list, current_idx, xml_lines = compile_expression(token_list, current_idx, xml_lines)
-    xml_lines = write_partial_token(xml_lines, name = "expressionList", position="end")
-    return token_list, current_idx, xml_lines
+        return compile_expressionList(token_list, current_idx, xml_lines)
 
 def compile_expression(token_list, current_idx, xml_lines):
     #xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write ,
+    
     xml_lines = write_partial_token(xml_lines, name = "expression", position="beginning")
-    xml_lines = write_partial_token(xml_lines, name = "term", position="beginning")
     if token_list[current_idx+1] in symbols[9:]:
         xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write operator
+        xml_lines = write_partial_token(xml_lines, name = "term", position="beginning")
         token_list, current_idx, xml_lines = compile_term(token_list, current_idx, xml_lines)
         xml_lines = write_partial_token(xml_lines, name = "term", position="end")
         xml_lines = write_partial_token(xml_lines, name = "expression", position="end")
         return token_list, current_idx, xml_lines
     else:
+        #xml_lines = write_partial_token(xml_lines, name = "term", position="beginning")
         token_list, current_idx, xml_lines = compile_term(token_list, current_idx, xml_lines)
-        xml_lines = write_partial_token(xml_lines, name = "term", position="end")
+        #xml_lines = write_partial_token(xml_lines, name = "term", position="end")
         xml_lines = write_partial_token(xml_lines, name = "expression", position="end")
         return token_list, current_idx, xml_lines
 
@@ -138,7 +134,10 @@ def compile_subroutineCall(token_list, current_idx, xml_lines):
             xml_lines = write_partial_token(xml_lines, name = "expressionList", position="end")
             # xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write )
         else:
+            xml_lines = write_partial_token(xml_lines, name = "expressionList", position="beginning")
             token_list, current_idx, xml_lines = compile_expressionList(token_list, current_idx, xml_lines)
+            xml_lines = write_partial_token(xml_lines, name = "expressionList", position="end")
+
         xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write )
     else:
         xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write .
@@ -149,7 +148,9 @@ def compile_subroutineCall(token_list, current_idx, xml_lines):
             xml_lines = write_partial_token(xml_lines, name = "expressionList", position="end")
             # xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write )
         else:
+            xml_lines = write_partial_token(xml_lines, name = "expressionList", position="beginning")
             token_list, current_idx, xml_lines = compile_expressionList(token_list, current_idx, xml_lines)
+            xml_lines = write_partial_token(xml_lines, name = "expressionList", position="end")
         xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write )
     return token_list, current_idx, xml_lines
 
@@ -170,7 +171,7 @@ def compile_let(token_list, current_idx, xml_lines):
 def compile_ifwhile(token_list, current_idx, xml_lines, name = ""):
     xml_lines = write_partial_token(xml_lines, name = f"{name}Statement", position="beginning")
     xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write (
-    xml_lines, current_idx = compile_expression(token_list, current_idx, xml_lines)
+    token_list, current_idx, xml_lines = compile_expression(token_list, current_idx, xml_lines)
     xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write )
     xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write {
     token_list, current_idx, xml_lines = compile_Statements(token_list, current_idx, xml_lines)
