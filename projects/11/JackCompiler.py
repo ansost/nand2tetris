@@ -1,3 +1,5 @@
+from collections import Counter
+
 import VMWriter
 from VMWriter import *
 
@@ -11,6 +13,8 @@ declarations = {"class" : 0,
                 "function": 0,
                 "method" : 0,
                 "var": 0}
+subroutine_symbols = {} 
+global_symbols = {"name": [], "type": [], "kind": [], "number": []}
 
 def return_token_type(token):
     if token in symbols:
@@ -62,16 +66,38 @@ def compile_varName(token_list, current_idx, xml_lines, use_compile_type = None)
     elif token_list[current_idx] == ",":
         xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write comma
         return compile_varName(token_list, current_idx, xml_lines, use_compile_type = use_compile_type)
+    
+def compile_varName_classVarDec(token_list, current_idx, xml_lines):
+    global_symbols["name"].append(token_list[current_idx])
+    xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write varName
+    if token_list[current_idx] in [";"]:
+        xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write semicolon
+        return token_list, current_idx, xml_lines
+    elif token_list[current_idx] in [")"]:
+        return token_list, current_idx, xml_lines
+    elif token_list[current_idx] == ",":
+        xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write comma
+        return compile_varName_classVarDec(token_list, current_idx, xml_lines)
 
 def compile_classVarDec(token_list, current_idx, xml_lines):
     if token_list[current_idx] in ["constructor", "function", "method"]:
         return token_list, current_idx, xml_lines
     else:
         xml_lines = write_partial_token(xml_lines, name = "classVarDec", position="beginning")
+        global_symbols["number"].append(Counter(global_symbols["kind"])[token_list[current_idx]])
+        global_symbols["kind"].append(token_list[current_idx])
         xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write static | field
+        global_symbols["type"].append(token_list[current_idx])
         xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write type
-        token_list, current_idx, xml_lines = compile_varName(token_list, current_idx, xml_lines, use_compile_type = False)
+        token_list, current_idx, xml_lines = compile_varName_classVarDec(token_list, current_idx, xml_lines)
         xml_lines = write_partial_token(xml_lines, name = "classVarDec", position="end")
+        
+        if len(global_symbols["kind"]) != len(global_symbols["name"]):
+            n_missing = len(global_symbols["kind"]) - len(global_symbols["name"])
+            for n in n_missing:
+                global_symbols["number"].append(Counter(global_symbols["kind"])[global_symbols["kind"][-1]])
+                global_symbols["kind"].append(global_symbols["kind"][-1])
+                global_symbols["type"].append(global_symbols["type"][-1])
         return compile_classVarDec(token_list, current_idx, xml_lines)
 
 def compile_varDec(token_list, current_idx, xml_lines):
@@ -277,13 +303,11 @@ def compile_subroutineDec(token_list, current_idx, xml_lines):
 def compile_class(token_list, xml_lines, current_idx):
     #xml_lines = ["<tokens>\n"]
     xml_lines = write_partial_token(xml_lines, name = "class", position="beginning")
-    breakpoint()
     xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write class
     xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write className
     xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write {
     token_list, current_idx, xml_lines = compile_classVarDec(token_list, current_idx, xml_lines)
     token_list, current_idx, xml_lines = compile_subroutineDec(token_list, current_idx, xml_lines)
-    #breakpoint()
     token_list, current_idx, xml_lines = compile_subroutineDec(token_list, current_idx, xml_lines)
     xml_lines, current_idx = write_token(token_list, current_idx, xml_lines) # write }
     xml_lines = write_partial_token(xml_lines, name = "class", position="end")
