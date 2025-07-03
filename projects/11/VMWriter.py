@@ -19,6 +19,9 @@ def write_arithmetic(command):
   }
     return f"{lookup[command]}\n"
 
+def write_misc(slot1, slot2, slot3):
+    return f"{slot1} {slot2} {slot3}\n"
+
 def write_label(label):
     return f"label {label}"
 
@@ -32,7 +35,7 @@ def write_routineCall(routineName, nArgs):
     return f"call {routineName} {nArgs}"
 
 def write_functionCall(functionName, nVars):
-    return f"function {functionName} {nVars}"
+    return f"function {functionName} {nVars}\n"
 
 def write_return():
     return f"return\n"

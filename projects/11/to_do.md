@@ -10,6 +10,7 @@ Scopes:
     * bleiben immer gleich
 
 - subroutine:
+    * `Class className` --> Name: `this`, type = `className` , kind = `argument`, number = `0`
     * parameter (as argument)
     * local (as local)
 
@@ -40,17 +41,34 @@ Script
 2. Ob der Identifier gerade declared (hinter var declaration) oder genutzt wird (in einer expression)
 3. zu welcher Kategorie er gehört mit der jeweiligen Nummer dazu (Type / Number)
 
+# vm translations
+**Global symbols**: Square Game
+| name       | type       | kind     | # |
+|------      |------      |------    |---|
+|   Square   |   Square   |   this   | 0 |
+| direction  | int        | this     | 1 |
+| 
 
-[https://peps.python.org/pep-0636/](https://peps.python.org/pep-0636/)
-```python
-match cmd.split():
-    case []:
-        continue
-    case [("push" | "pop") as action, segment, index]:
-        # handle memory command
-    case [("add" | "sub" | "neg" | "and" | "or" | "not") as command]:
-        # handle arithmetic / logical command
-    # more cases here
-    case _:
-        # invalid command, raise error
+```pyhton
+      let square = Square.new(0, 0, 30);
+      let direction = 0;  // initial state is no movement
+      return this;
+```
+```
+# put arguments onto the stack
++push constant 0
++push constant 0
++push constant 30
+
+# call subroutine
+call Square.new 3
+
+# put defined square onto the stack 
+pop this 0
+
+# put value of next var declaration onto the stack
+push constant 0
+
+# put variable direction onto the stack
+pop this 1
 ```
