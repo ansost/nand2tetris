@@ -8,15 +8,17 @@ from collections import Counter
 import JackTokenizer
 from JackTokenizer import *
 
-import JackCompiler
-from JackCompiler import *
+# import JackCompiler
+# from JackCompiler import *
 
+import smolJack
+from smolJack import *
 
 def remove_comments(lines):
     """Removes comments with thy syntax: /** */ or // ."""
     cleaned = []
     for line in lines:
-        line = re.sub(r"(//.*?$)|^ \*.*$|/\*\*.*$", "", line)
+        line = re.sub(r"(//.*?$)|^ \*.*$|/\*\*.*$|.*\*\/$", "", line)
         line = re.sub(r"\t", "", line)
         if line:
             cleaned.append(line)
@@ -110,13 +112,13 @@ if __name__ == "__main__":
             raw_lines = f.readlines()
         lines = remove_comments(raw_lines)
         tokens = detailed_tokenize(lines, symbols)
-
         # Debugging:
         # with open(file +".tokens", "w") as f:
         #     f.writelines([str(line)+"\n" for line in tokens])
 
         # Write xml code.
-        vm_code, xml_lines = compile_class(tokens, xml_lines, current_idx=0, global_symbols=global_symbols, subroutine_symbols=subroutine_symbols)
+        
+        vm_code, xml_lines = compile_class(tokens, xml_lines, global_symbols=global_symbols, subroutine_symbols=subroutine_symbols)
         finished_xml_lines = []
         for line in xml_lines:
             line = re.sub(r"> < <", "> &lt; <", line)
